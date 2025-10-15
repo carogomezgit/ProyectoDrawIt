@@ -1,4 +1,4 @@
-package org.drawit;
+package org.drawit.servlets;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
