@@ -13,7 +13,7 @@ public interface AdmConexion {
     // cadena conexion a mi BD
 
     // String dbCadenaConexion = "jdbc:mysql://localhost:3306/progAutos";
-    String dbCadenaConexion = "jdbc:mysql://localhost:3306/progautos";
+    String dbCadenaConexion = "jdbc:mysql://localhost:3306/drawit";
 
     String dbUsuario = "root";
     // nom usuarioBD

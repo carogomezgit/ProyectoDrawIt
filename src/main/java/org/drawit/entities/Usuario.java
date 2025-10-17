@@ -41,11 +41,11 @@ public class Usuario implements Comparable {
     this.apellido = apellido;
   }
 
-  public String getUsername() {
+  public String getCorreo() {
     return correo;
   }
 
-  public void setUsername(String correo) {
+  public void setCorreo(String correo) {
     this.correo = correo;
   }
 
@@ -61,7 +61,14 @@ public class Usuario implements Comparable {
 
   @Override
   public int compareTo(Object o) {
-    return 0;
+    Usuario otro= (Usuario) o;
+    int comparacionApellido = this.apellido.compareTo(otro.apellido);
+
+    if (comparacionApellido != 0) {
+      return comparacionApellido;
+    }
+
+    return this.nombre.compareTo(otro.nombre);
   }
 }
 
