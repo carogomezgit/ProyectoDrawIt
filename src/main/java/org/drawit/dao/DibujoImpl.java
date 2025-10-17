@@ -1,9 +1,7 @@
 package org.drawit.dao;
 
-
 import org.drawit.entities.Dibujo;
 import org.drawit.entities.Tematica;
-import org.drawit.entities.Usuario;
 import org.drawit.interfaces.AdmConexion;
 import org.drawit.interfaces.DAO;
 
@@ -92,21 +90,108 @@ public class DibujoImpl implements DAO<Dibujo, Integer>, AdmConexion {
 
   @Override
   public void update(Dibujo objeto) {
+    Dibujo dibujo = objeto;
 
+    if (this.existsById(dibujo.getIdDibujo())) {
+      conn = obtenerConexion();
+      PreparedStatement pst = null;
+
+      try {
+        pst = conn.prepareStatement(SQL_UPDATE);
+
+        pst.setString(1, dibujo.getTitulo());
+        pst.setString(2, dibujo.getTematica().toString());
+
+        int resultado = pst.executeUpdate();
+        if (resultado == 1) {
+          System.out.println("Dibujo actualizado correctamente");
+        } else {
+          System.out.println("No se pudo actualizar el dibujo");
+        }
+
+        pst.close();
+        conn.close();
+      } catch (SQLException e) {
+        throw new RuntimeException(e);
+      }
+    }
   }
 
   @Override
   public void delete(Integer id) {
+    conn = obtenerConexion();
 
+    PreparedStatement pst = null;
+
+    try {
+      pst = conn.prepareStatement(SQL_DELETE);
+
+      pst.setInt(1, id);
+
+      int resultado = pst.executeUpdate();
+      if (resultado == 1) {
+        System.out.println("Dibujo eliminado");
+      } else {
+        System.out.println("No se pudo eliminar el dibujo");
+      }
+
+      pst.close();
+      conn.close();
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   @Override
   public Dibujo getById(Integer id) {
-    return null;
+    conn = obtenerConexion();
+
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+    Dibujo dibujo = null;
+
+    try {
+      pst = conn.prepareStatement(SQL_DELETE);
+
+      pst.setInt(1, dibujo.getIdDibujo());
+      rs = pst.executeQuery();
+
+      if (rs.next()) {
+        dibujo = new Dibujo();
+        dibujo.setIdDibujo(rs.getInt("idDibujo"));
+        dibujo.setTitulo(rs.getString("titulo"));
+      }
+
+      rs.close();
+      pst.close();
+      conn.close();
+
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+    return dibujo;
   }
 
   @Override
   public boolean existsById(Integer id) {
-    return false;
+    conn = obtenerConexion();
+
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+    boolean existe = false;
+
+    try {
+      pst = conn.prepareStatement(SQL_GETBYID);
+      pst.setInt(1, id);
+      rs = pst.executeQuery();
+
+      if (rs.next()) {
+        existe = true;
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+
+    return existe;
   }
 }

@@ -94,6 +94,8 @@ public class UsuarioImpl implements DAO<Usuario, Integer>, AdmConexion {
       PreparedStatement pst = null;
 
       try {
+        pst = conn.prepareStatement(SQL_UPDATE);
+
         pst.setString(1, usuario.getNombre());
         pst.setString(2, usuario.getApellido());
         pst.setString(3, usuario.getCorreo());
@@ -109,7 +111,6 @@ public class UsuarioImpl implements DAO<Usuario, Integer>, AdmConexion {
         throw new RuntimeException(e);
       }
     }
-
   }
 
   @Override
@@ -179,12 +180,12 @@ public class UsuarioImpl implements DAO<Usuario, Integer>, AdmConexion {
 
     try {
       pst = conn.prepareStatement(SQL_GETBYID);
-    pst.setInt(1, id);
-    rs = pst.executeQuery();
+      pst.setInt(1, id);
+      rs = pst.executeQuery();
 
-    if (rs.next()) {
-      existe = true;
-    }
+      if (rs.next()) {
+        existe = true;
+      }
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
