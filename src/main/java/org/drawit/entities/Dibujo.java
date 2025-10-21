@@ -7,14 +7,26 @@ public class Dibujo implements Comparable{
   private String titulo;
   private Usuario usuario;
   private Tematica tematica;
+  private String imagen;
 
-  public Dibujo (){
+  public Dibujo () {
+    this.idDibujo = -1;
+    this.usuario = new Usuario();
   }
 
-  public Dibujo (String titulo, Usuario usuario, Tematica tematica){
+  public Dibujo (String titulo, Usuario usuario, Tematica tematica, String imagen){
     this.titulo = titulo;
     this.usuario = usuario;
     this.tematica = tematica;
+    this.imagen = imagen;
+  }
+
+  public Dibujo (int idDibujo, String titulo, Usuario usuario, Tematica tematica, String imagen){
+    this.idDibujo = idDibujo;
+    this.titulo = titulo;
+    this.usuario = usuario;
+    this.tematica = tematica;
+    this.imagen = imagen;
   }
 
   public int getIdDibujo() {
@@ -49,13 +61,22 @@ public class Dibujo implements Comparable{
     this.usuario = usuario;
   }
 
+  public String getImagen() {
+    return imagen;
+  }
+
+  public void setImagen(String imagen) {
+    this.imagen = imagen;
+  }
+
   @Override
   public String toString() {
     return "Dibujo{" +
         "idDibujo=" + idDibujo +
         ", titulo='" + titulo + '\'' +
-        ", autor=" + usuario +
-        ", tematica='" + tematica + '\'' +
+        ", usuario=" + this.usuario.toString() +
+        ", tematica=" + tematica +
+        ", imagen='" + imagen + '\'' +
         '}';
   }
 
@@ -71,7 +92,7 @@ public class Dibujo implements Comparable{
 
   @Override
   public int hashCode() {
-    return Objects.hash(idDibujo, titulo, usuario, tematica);
+    return Objects.hash(idDibujo, usuario);
   }
 
 

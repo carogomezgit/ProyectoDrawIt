@@ -1,5 +1,6 @@
 package org.drawit.dao;
 
+import org.drawit.entities.TipoUsuario;
 import org.drawit.entities.Usuario;
 import org.drawit.interfaces.AdmConexion;
 import org.drawit.interfaces.DAO;
@@ -12,12 +13,12 @@ public class UsuarioImpl implements DAO<Usuario, Integer>, AdmConexion {
   private Connection conn = null;
 
   private static final String SQL_INSERT =
-      "INSERT INTO usuario (nombre, apellido, correo) " +
+      "INSERT INTO usuario (nombre, apellido, correo, tipo) " +
           "VALUES (?, ?, ?)";
 
   private static final String SQL_UPDATE =
       "UPDATE usuario SET " +
-          "nombre = ? , apellido = ? , correo = ? " +
+          "nombre = ? , apellido = ? , correo = ? , tipo = ? " +
           "WHERE idUsuario = ?";
 
   private static final String SQL_DELETE = "DELETE FROM usuario WHERE id = ?";
@@ -46,6 +47,7 @@ public class UsuarioImpl implements DAO<Usuario, Integer>, AdmConexion {
         usuario.setNombre(rs.getString("nombre"));
         usuario.setApellido(rs.getString("apellido"));
         usuario.setCorreo(rs.getString("correo"));
+        usuario.setTipo(TipoUsuario.valueOf(rs.getString("tipo")));
 
         listaUsuarios.add(usuario);
       }
@@ -73,6 +75,7 @@ public class UsuarioImpl implements DAO<Usuario, Integer>, AdmConexion {
       pst.setString(1, usuario.getNombre());
       pst.setString(2, usuario.getApellido());
       pst.setString(3, usuario.getCorreo());
+      pst.setString(3, usuario.getTipo().toString());
 
       int resultado = pst.executeUpdate();
       if (resultado == 1) {
@@ -99,7 +102,8 @@ public class UsuarioImpl implements DAO<Usuario, Integer>, AdmConexion {
         pst.setString(1, usuario.getNombre());
         pst.setString(2, usuario.getApellido());
         pst.setString(3, usuario.getCorreo());
-        pst.setInt(4, usuario.getIdUsuario());
+        pst.setString(4, usuario.getTipo().toString());
+        pst.setInt(5, usuario.getIdUsuario());
 
         int resultado = pst.executeUpdate();
         if (resultado == 1) {
@@ -158,6 +162,7 @@ public class UsuarioImpl implements DAO<Usuario, Integer>, AdmConexion {
         usuario.setNombre(rs.getString("nombre"));
         usuario.setApellido(rs.getString("apellido"));
         usuario.setCorreo(rs.getString("correo"));
+        usuario.setTipo(TipoUsuario.valueOf(rs.getString("tipo")));
       }
 
       rs.close();

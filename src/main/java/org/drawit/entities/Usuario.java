@@ -6,15 +6,18 @@ public class Usuario implements Comparable {
   private String nombre;
   private String apellido;
   private String correo;
+  private TipoUsuario tipo;
 
   // constructor
   public Usuario (){
   }
 
-  public Usuario (String nombre, String apellido, String correo){
+  public Usuario (int idUsuario, String nombre, String apellido, String correo, TipoUsuario tipo){
+    this.idUsuario = idUsuario;
     this.nombre = nombre;
     this.apellido = apellido;
     this.correo = correo;
+    this.tipo = tipo;
   }
 
   public int getIdUsuario() {
@@ -49,6 +52,14 @@ public class Usuario implements Comparable {
     this.correo = correo;
   }
 
+  public TipoUsuario getTipo() {
+    return tipo;
+  }
+
+  public void setTipo(TipoUsuario tipo) {
+    this.tipo = tipo;
+  }
+
   @Override
   public String toString() {
     return "Usuario{" +
@@ -61,7 +72,7 @@ public class Usuario implements Comparable {
 
   @Override
   public int compareTo(Object o) {
-    Usuario otro= (Usuario) o;
+    Usuario otro = (Usuario) o;
     int comparacionApellido = this.apellido.compareTo(otro.apellido);
 
     if (comparacionApellido != 0) {
