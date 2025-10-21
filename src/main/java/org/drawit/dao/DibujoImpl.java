@@ -13,17 +13,17 @@ public class DibujoImpl implements DAO<Dibujo, Integer>, AdmConexion {
   private Connection conn = null;
 
   private static final String SQL_INSERT =
-      "INSERT INTO dibujo (titulo, idUsuario, tematica) " +
+      "INSERT INTO dibujo (titulo, idUsuario, tematica, imagen) " +
           "VALUES (?, ?, ?)";
 
   private static final String SQL_UPDATE =
       "UPDATE dibujo SET " +
-          "titulo = ? , idUsuario = ? , tematica = ? " +
+          "titulo = ? , idUsuario = ? , tematica = ? , imagen = ? " +
           "WHERE idDibujo = ?";
 
   private static final String SQL_DELETE = "DELETE FROM dibujo WHERE idDibujo = ?";
   private static final String SQL_GETALL =
-      "SELECT * FROM dibujo ORDER BY tematica";
+      "SELECT * FROM dibujo ORDER BY titulo";
   private static final String SQL_GETBYID = "SELECT * FROM dibujo WHERE idDibujo = ? ";
 
 
