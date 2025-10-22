@@ -24,7 +24,7 @@ public class seUsuario extends HttpServlet {
     String apellido = "";
     String correo = "";
     TipoUsuario tipo = null;
-    int id = -1;
+    int idUsuario = -1;
 
     operacion = req.getParameter("operacion");
 
@@ -33,26 +33,26 @@ public class seUsuario extends HttpServlet {
       apellido = req.getParameter("txtApellido");
       correo = req.getParameter("txtCorreo");
       tipo = TipoUsuario.valueOf(req.getParameter("txtTipo"));
-      id = Integer.parseInt(req.getParameter("txtId"));
+      idUsuario = Integer.parseInt(req.getParameter("txtIdUsuario"));
     }
     else {
       if (req.getParameter("id")!=null){
-        id = Integer.parseInt(req.getParameter("id"));
+        idUsuario = Integer.parseInt(req.getParameter("id"));
       }
       else
-        id=-1;
+        idUsuario =-1;
     }
 
     // para guardar el cliente
     UsuarioImpl usuarioDAO = new UsuarioImpl();
     if (operacion.equals("nuevo")) { // si es nuevo
-      Usuario usuarioNuevo = new Usuario(id, nombre, apellido, correo, tipo);
+      Usuario usuarioNuevo = new Usuario(idUsuario, nombre, apellido, correo, tipo);
       usuarioDAO.insert(usuarioNuevo);
     }
 
     // para editar el cliente
     if (operacion.equals("editar")) { // si es editar
-      Usuario usuarioEditar = usuarioDAO.getById(id);
+      Usuario usuarioEditar = usuarioDAO.getById(idUsuario);
       usuarioEditar.setNombre(nombre);
       usuarioEditar.setApellido(apellido);
       usuarioEditar.setCorreo(correo);
@@ -62,7 +62,7 @@ public class seUsuario extends HttpServlet {
 
     // para borrar el cliente
     if (operacion.equals("eliminar")) { // si es borrar
-      usuarioDAO.delete(id);
+      usuarioDAO.delete(idUsuario);
     }
 
     RequestDispatcher rd = req.getRequestDispatcher("/index.jsp");

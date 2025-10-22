@@ -1,5 +1,5 @@
 package org.drawit.entities;
 
 public enum Tematica {
-  Paisaje, Animales, Naturaleza;
+  NATURALEZA, MONOCOLOR, PIXEL, HALLOWEEN, ORIGINAL, FANART, DIGITAL, TRADICIONAL;
 }

@@ -1,16 +1,19 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>DrawIt!</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-  </head>
+<!DOCTYPE html>
+<html>
+<body>
+<h2>Test</h2>
 
-  <body>
-    <h1>DrawIt!</h1>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+<br>
+<a href="formRegistro.jsp"> Nuevo Usuario </a>
+<br>
+<a href="formDibujo.jsp"> Nuevo Dibujo </a>
+<br>
+<a href="listadoUsuario.jsp"> Listado Usuario </a>
+<br>
+<a href="muralDibujos.jsp"> Listado Dibujo </a>
+
+</body>
 
 
-  </body>
+
 </html>
