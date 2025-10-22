@@ -14,7 +14,7 @@ public class DibujoImpl implements DAO<Dibujo, Integer>, AdmConexion {
 
   private static final String SQL_INSERT =
       "INSERT INTO dibujo (titulo, idUsuario, tematica, imagen) " +
-          "VALUES (?, ?, ?)";
+          "VALUES (?, ?, ?, ?)";
 
   private static final String SQL_UPDATE =
       "UPDATE dibujo SET " +
@@ -47,6 +47,7 @@ public class DibujoImpl implements DAO<Dibujo, Integer>, AdmConexion {
         dibujo.setTematica(Tematica.valueOf(rs.getString("tematica")));
         UsuarioImpl daoUser = new UsuarioImpl();
         dibujo.setUsuario(daoUser.getById(rs.getInt("idUsuario")));
+        dibujo.setImagen(rs.getString("imagen"));
         listaDibujos.add(dibujo);
       }
 
@@ -73,9 +74,9 @@ public class DibujoImpl implements DAO<Dibujo, Integer>, AdmConexion {
       pst = conn.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
 
       pst.setString(1, dibujo.getTitulo());
-      pst.setString(2, dibujo.getTematica().toString());
-
-      pst.setInt(3, dibujo.getUsuario().getIdUsuario());
+      pst.setInt(2, dibujo.getUsuario().getIdUsuario());
+      pst.setString(3, dibujo.getTematica().toString());
+      pst.setString(4, dibujo.getImagen());
 
       int resultado = pst.executeUpdate();
       if (resultado == 1) {
@@ -100,7 +101,10 @@ public class DibujoImpl implements DAO<Dibujo, Integer>, AdmConexion {
         pst = conn.prepareStatement(SQL_UPDATE);
 
         pst.setString(1, dibujo.getTitulo());
-        pst.setString(2, dibujo.getTematica().toString());
+        pst.setInt(2, dibujo.getUsuario().getIdUsuario());
+        pst.setString(3, dibujo.getTematica().toString());
+        pst.setString(4, dibujo.getImagen());
+        pst.setInt(5, dibujo.getIdDibujo());
 
         int resultado = pst.executeUpdate();
         if (resultado == 1) {
@@ -151,15 +155,19 @@ public class DibujoImpl implements DAO<Dibujo, Integer>, AdmConexion {
     Dibujo dibujo = null;
 
     try {
-      pst = conn.prepareStatement(SQL_DELETE);
+      pst = conn.prepareStatement(SQL_GETBYID);
 
-      pst.setInt(1, dibujo.getIdDibujo());
+      pst.setInt(1, id);
       rs = pst.executeQuery();
 
       if (rs.next()) {
         dibujo = new Dibujo();
         dibujo.setIdDibujo(rs.getInt("idDibujo"));
         dibujo.setTitulo(rs.getString("titulo"));
+        dibujo.setTematica(Tematica.valueOf(rs.getString("tematica")));
+        dibujo.setImagen(rs.getString("imagen"));
+        UsuarioImpl daoUser = new UsuarioImpl();
+        dibujo.setUsuario(daoUser.getById(rs.getInt("idUsuario")));
       }
 
       rs.close();

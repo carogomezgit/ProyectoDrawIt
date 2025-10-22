@@ -32,7 +32,7 @@ public class seUsuario extends HttpServlet {
       nombre = req.getParameter("txtNombre");
       apellido = req.getParameter("txtApellido");
       correo = req.getParameter("txtCorreo");
-      tipo = TipoUsuario.valueOf(req.getParameter("txtTipo"));
+      tipo = TipoUsuario.valueOf(req.getParameter("lstTipo"));
       idUsuario = Integer.parseInt(req.getParameter("txtIdUsuario"));
     }
     else {

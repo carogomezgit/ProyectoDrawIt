@@ -14,17 +14,17 @@ public class UsuarioImpl implements DAO<Usuario, Integer>, AdmConexion {
 
   private static final String SQL_INSERT =
       "INSERT INTO usuario (nombre, apellido, correo, tipo) " +
-          "VALUES (?, ?, ?)";
+          "VALUES (?, ?, ?, ?)";
 
   private static final String SQL_UPDATE =
       "UPDATE usuario SET " +
           "nombre = ? , apellido = ? , correo = ? , tipo = ? " +
           "WHERE idUsuario = ?";
 
-  private static final String SQL_DELETE = "DELETE FROM usuario WHERE id = ?";
+  private static final String SQL_DELETE = "DELETE FROM usuario WHERE idUsuario = ?";
   private static final String SQL_GETALL =
       "SELECT * FROM usuario ORDER BY apellido";
-  private static final String SQL_GETBYID = "SELECT * FROM usuario WHERE id = ? ";
+  private static final String SQL_GETBYID = "SELECT * FROM usuario WHERE idUsuario = ? ";
 
 
   @Override
@@ -75,7 +75,7 @@ public class UsuarioImpl implements DAO<Usuario, Integer>, AdmConexion {
       pst.setString(1, usuario.getNombre());
       pst.setString(2, usuario.getApellido());
       pst.setString(3, usuario.getCorreo());
-      pst.setString(3, usuario.getTipo().toString());
+      pst.setString(4, usuario.getTipo().toString());
 
       int resultado = pst.executeUpdate();
       if (resultado == 1) {
@@ -153,7 +153,7 @@ public class UsuarioImpl implements DAO<Usuario, Integer>, AdmConexion {
 
     try {
       pst = conn.prepareStatement(SQL_GETBYID);
-      pst.setInt(1, usuario.getIdUsuario());
+      pst.setInt(1, id);
       rs = pst.executeQuery();
 
       if (rs.next()) {

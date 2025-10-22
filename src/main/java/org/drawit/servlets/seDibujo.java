@@ -34,9 +34,9 @@ public class seDibujo extends HttpServlet {
 
     if (operacion.equals("editar") || operacion.equals("nuevo")) {
       titulo = req.getParameter("txtTitulo");
-      // usuario = req.getParameter("txtUsuario");
       usuario = new UsuarioImpl().getById(Integer.valueOf(req.getParameter("txtUsuario")));
-      tematica = Tematica.valueOf(req.getParameter("txtTematica"));
+      tematica = Tematica.valueOf(req.getParameter("lstTematica"));
+      imagen = req.getParameter("txtImagen");
       id = Integer.parseInt(req.getParameter("txtId"));
     }
     else {

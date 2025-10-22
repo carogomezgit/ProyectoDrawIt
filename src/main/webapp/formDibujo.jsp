@@ -2,27 +2,31 @@
 <%@ page isELIgnored="false" %> .
 <%@ taglib prefix="d" uri="jakarta.tags.core" %>
 
+<%@ page import="org.drawit.entities.Tematica" %>
+
 <jsp:useBean id="dibujo" class="org.drawit.entities.Dibujo" scope="request" />
 <jsp:useBean id="dibujoDao" class="org.drawit.dao.DibujoImpl" scope="page" />
+<jsp:useBean id="usuarioDao" class="org.drawit.dao.UsuarioImpl" scope="page" />
+<d:set var="listaUsuarios" value="${usuarioDao.getAll()}" />
 
-<c:if test="${param.operacion == 'editar'}">
-    <c:set var="idDibujo" value="${Integer.parseInt(param.id)}" />
-    <c:set var="dibujoEditar" value="${dibujoDao.getById(idDibujo)}" />
-    <c:set var="listaDibujos" value="${dibujoDao.getAll()}" />
-    <c:set var="listaTematicas" value="${Tematica.values()}" />
-</c:if>
+<d:if test="${param.operacion == 'editar'}">
+    <d:set var="idDibujo" value="${Integer.parseInt(param.id)}" />
+    <d:set var="dibujoEditar" value="${dibujoDao.getById(idDibujo)}" />
+    <d:set var="listaDibujos" value="${dibujoDao.getAll()}" />
+    <d:set var="listaTematicas" value="${Tematica.values()}" />
+</d:if>
 
 <%
-    Tematica[] tipos = Tematica.values();
-    request.setAttribute("listaTematicas", tipos);
+    Tematica[] tematicas = Tematica.values();
+    request.setAttribute("listaTematicas", tematicas);
 %>
 
 <h2>
-<c:choose>
-    <c:when test="${param.operacion == 'editar'}" > Editar Dibujo </c:when>
-    <c:when test="${param.operacion == 'eliminar'}" > Eliminar Dibujo </c:when>
-    <c:otherwise> Nuevo Dibujo </c:otherwise>
-</c:choose>
+<d:choose>
+    <d:when test="${param.operacion == 'editar'}" > Editar Dibujo </d:when>
+    <d:when test="${param.operacion == 'eliminar'}" > Eliminar Dibujo </d:when>
+    <d:otherwise> Nuevo Dibujo </d:otherwise>
+</d:choose>
 </h2>
 
 <html>
@@ -31,12 +35,12 @@
 
 <label for="selectDibujo">Seleccionar Dibujo</label>
 <select name="lstDibujo" id="lstDibujo" tabindex="1">
-    <c:forEach var="dibujo" items="${listaDibujos}">
+    <d:forEach var="dibujo" items="${listaDibujos}">
         <option value="${dibujo.idDibujo}"
-            <c:if test="${dibujoEditar.idDibujo == dibujo.idDibujo}">selected</c:if>>
+            <d:if test="${dibujoEditar.idDibujo == dibujo.idDibujo}">selected</d:if>>
             ${dibujo.titulo}
             </option>
-        </c:forEach>
+        </d:forEach>
     </select>
 <br>
 
@@ -49,23 +53,34 @@
     />
 
 <label for="txtTitulo"> Titulo </label>
-<input type="text" name="txtNombre" id="txtNombre" placeholder="Nombre"
+<input type="text" name="txtTitulo" id="txtTitulo" placeholder="Título"
     value="${ not empty dibujoEditar.titulo ? dibujoEditar.titulo : '' }"
 required />
 <br>
 <label for="txtUsuario"> Autor </label>
-<input type="text" name="txtApellido" id="txtApellido" placeholder="Apellido"
-    value="${ not empty usuarioEditar.apellido ? usuarioEditar.apellido : '' }"
-required />
+<select name="txtUsuario" id="txtUsuario" required>
+    <option value="">Seleccione un autor</option>
+    <d:forEach var="usr" items="${listaUsuarios}">
+        <option value="${usr.idUsuario}"
+            <d:if test="${dibujoEditar.usuario.idUsuario == usr.idUsuario}">selected</d:if>
+        >
+            ${usr.nombre} ${usr.apellido}
+        </option>
+    </d:forEach>
+</select>
 <br>
-<label for="txtTematica"> Temática </label>
-<input type="text" name="txtTematica" id="txtTematica" placeholder="Temática"
-    value="${ not empty dibujoEditar.tematica ? dibujoEditar.tematica : '' }"
-required />
+<label for="txtTematica"> Tematica </label>
+<select name="lstTematica" id="lstTematica" tabindex="1">
+        <d:forEach var="tematica" items="${listaTematicas}">
+            <option value="${tematica.name()}">
+                ${tematica.name()}
+            </option>
+        </d:forEach>
+</select>
 <br>
-<label for="txtTipo"> Tipo </label>
-<input type="text" name="txtTipo" id="txtTipo" placeholder="Tipo"
-    value="${ not empty usuarioEditar.tipo ? usuarioEditar.tipo : '' }"
+<label for="txtImagen"> Imagen </label>
+<input type="text" name="txtImagen" id="txtImagen" placeholder="Url de imagen"
+    value="${ not empty dibujoEditar.imagen ? dibujoEditar.imagen : '' }"
 required />
 <br>
 <input type="submit" value="Enviar" />

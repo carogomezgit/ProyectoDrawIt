@@ -40,7 +40,7 @@
     </select>
 <br>
 
-<input type="hidden" name="txtId" id="txtId"
+<input type="hidden" name="txtIdUsuario" id="txtIdUsuario"
     value="${not empty usuarioEditar.id ? usuarioEditar.idUsuario : -1}"
 />
 

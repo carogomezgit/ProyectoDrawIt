@@ -34,7 +34,7 @@
             <td> <%=d.getIdDibujo() %> </td>
             <td> <%=d.getImagen() %></td>
             <td> <%=d.getTitulo() %> </td>
-            <td> <%=d.getUsuario() %> </td>
+            <td> <%=d.getUsuario().getNombre() %> <%=d.getUsuario().getApellido() %> </td>
             <td> <%=d.getTematica() %> </td>
             <td> <a href="formDibujo.jsp?operacion=editar&id=<%=d.getIdDibujo() %>">Editar</a></td>
             <td> <a href="seDibujo?operacion=eliminar&id=<%=d.getIdDibujo() %>">Borrar</a></td>
