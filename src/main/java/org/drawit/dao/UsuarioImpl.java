@@ -13,18 +13,20 @@ public class UsuarioImpl implements DAO<Usuario, Integer>, AdmConexion {
   private Connection conn = null;
 
   private static final String SQL_INSERT =
-      "INSERT INTO usuario (nombre, apellido, correo, tipo) " +
-          "VALUES (?, ?, ?, ?)";
+      "INSERT INTO usuario (nombre, apellido, correo, contraseña, tipo) " +
+          "VALUES (?, ?, ?, ?, ?)";
 
   private static final String SQL_UPDATE =
       "UPDATE usuario SET " +
-          "nombre = ? , apellido = ? , correo = ? , tipo = ? " +
+          "nombre = ? , apellido = ? , correo = ? , contraseña = ? , tipo = ? " +
           "WHERE idUsuario = ?";
 
   private static final String SQL_DELETE = "DELETE FROM usuario WHERE idUsuario = ?";
   private static final String SQL_GETALL =
-      "SELECT * FROM usuario ORDER BY apellido";
+      "SELECT * FROM usuario ORDER BY idUsuario";
   private static final String SQL_GETBYID = "SELECT * FROM usuario WHERE idUsuario = ? ";
+
+  private static final String SQL_GETBYCORREO = "SELECT * FROM usuario WHERE correo = ? ";
 
 
   @Override
@@ -43,10 +45,11 @@ public class UsuarioImpl implements DAO<Usuario, Integer>, AdmConexion {
 
       while (rs.next()) {
         Usuario usuario = new Usuario();
-        usuario.setUsuarioId(rs.getInt("idUsuario"));
+        usuario.setIdUsuario(rs.getInt("idUsuario"));
         usuario.setNombre(rs.getString("nombre"));
         usuario.setApellido(rs.getString("apellido"));
         usuario.setCorreo(rs.getString("correo"));
+        usuario.setContrasenia(rs.getString("contraseña"));
         usuario.setTipo(TipoUsuario.valueOf(rs.getString("tipo")));
 
         listaUsuarios.add(usuario);
@@ -75,7 +78,8 @@ public class UsuarioImpl implements DAO<Usuario, Integer>, AdmConexion {
       pst.setString(1, usuario.getNombre());
       pst.setString(2, usuario.getApellido());
       pst.setString(3, usuario.getCorreo());
-      pst.setString(4, usuario.getTipo().toString());
+      pst.setString(4, usuario.getContrasenia());
+      pst.setString(5, usuario.getTipo().toString());
 
       int resultado = pst.executeUpdate();
       if (resultado == 1) {
@@ -102,8 +106,9 @@ public class UsuarioImpl implements DAO<Usuario, Integer>, AdmConexion {
         pst.setString(1, usuario.getNombre());
         pst.setString(2, usuario.getApellido());
         pst.setString(3, usuario.getCorreo());
-        pst.setString(4, usuario.getTipo().toString());
-        pst.setInt(5, usuario.getIdUsuario());
+        pst.setString(4, usuario.getContrasenia());
+        pst.setString(5, usuario.getTipo().toString());
+        pst.setInt(6, usuario.getIdUsuario());
 
         int resultado = pst.executeUpdate();
         if (resultado == 1) {
@@ -158,10 +163,11 @@ public class UsuarioImpl implements DAO<Usuario, Integer>, AdmConexion {
 
       if (rs.next()) {
         usuario = new Usuario();
-        usuario.setUsuarioId(rs.getInt("idUsuario"));
+        usuario.setIdUsuario(rs.getInt("idUsuario"));
         usuario.setNombre(rs.getString("nombre"));
         usuario.setApellido(rs.getString("apellido"));
         usuario.setCorreo(rs.getString("correo"));
+        usuario.setContrasenia(rs.getString("contraseña"));
         usuario.setTipo(TipoUsuario.valueOf(rs.getString("tipo")));
       }
 
@@ -186,6 +192,28 @@ public class UsuarioImpl implements DAO<Usuario, Integer>, AdmConexion {
     try {
       pst = conn.prepareStatement(SQL_GETBYID);
       pst.setInt(1, id);
+      rs = pst.executeQuery();
+
+      if (rs.next()) {
+        existe = true;
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+
+    return existe;
+  }
+
+  public boolean existsByCorreo(String correo) {
+    conn = obtenerConexion();
+
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+    boolean existe = false;
+
+    try {
+      pst = conn.prepareStatement(SQL_GETBYCORREO);
+      pst.setString(1, correo);
       rs = pst.executeQuery();
 
       if (rs.next()) {

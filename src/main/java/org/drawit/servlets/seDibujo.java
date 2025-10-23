@@ -36,7 +36,8 @@ public class seDibujo extends HttpServlet {
       titulo = req.getParameter("txtTitulo");
       usuario = new UsuarioImpl().getById(Integer.valueOf(req.getParameter("txtUsuario")));
       tematica = Tematica.valueOf(req.getParameter("lstTematica"));
-      imagen = req.getParameter("txtImagen");
+      String urlOriginal = req.getParameter("txtImagen");
+      imagen = convertirLink(urlOriginal); // llamar a metodo convertirLink
       id = Integer.parseInt(req.getParameter("txtId"));
     }
     else {
@@ -71,5 +72,29 @@ public class seDibujo extends HttpServlet {
 
     RequestDispatcher rd = req.getRequestDispatcher("/index.jsp");
     rd.forward(req, res);
+  }
+
+  private String convertirLink(String url) { // esto es para convertir a enlace directo (google drive)
+    if (url != null && url.contains("drive.google.com/file/d/")) {
+      try {
+        int idStartIndex = url.indexOf("/d/") + 3;
+
+        int idEndIndex = url.indexOf("/", idStartIndex);
+        if (idEndIndex == -1) {
+          idEndIndex = url.indexOf("?", idStartIndex);
+        }
+        if (idEndIndex == -1) {
+          idEndIndex = url.length();
+        }
+
+        String fileId = url.substring(idStartIndex, idEndIndex);
+        return "https://drive.google.com/thumbnail?id=" + fileId;
+
+      } catch (Exception e) {
+        System.out.println("Error al convertir URL de Google Drive: " + e.getMessage());
+        return url;
+      }
+    }
+    return url;
   }
 }

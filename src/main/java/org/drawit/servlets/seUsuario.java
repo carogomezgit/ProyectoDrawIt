@@ -23,6 +23,7 @@ public class seUsuario extends HttpServlet {
     String nombre = "";
     String apellido = "";
     String correo = "";
+    String contrasenia = "";
     TipoUsuario tipo = null;
     int idUsuario = -1;
 
@@ -32,6 +33,7 @@ public class seUsuario extends HttpServlet {
       nombre = req.getParameter("txtNombre");
       apellido = req.getParameter("txtApellido");
       correo = req.getParameter("txtCorreo");
+      contrasenia = req.getParameter("txtContraseña");
       tipo = TipoUsuario.valueOf(req.getParameter("lstTipo"));
       idUsuario = Integer.parseInt(req.getParameter("txtIdUsuario"));
     }
@@ -46,8 +48,17 @@ public class seUsuario extends HttpServlet {
     // para guardar el cliente
     UsuarioImpl usuarioDAO = new UsuarioImpl();
     if (operacion.equals("nuevo")) { // si es nuevo
-      Usuario usuarioNuevo = new Usuario(idUsuario, nombre, apellido, correo, tipo);
-      usuarioDAO.insert(usuarioNuevo);
+
+      if (usuarioDAO.existsByCorreo(correo)) {
+        System.out.println("El correo ya se encuentra registrado");
+        req.setAttribute("error", "El correo " + correo + " ya se encuentra registrado");
+        RequestDispatcher rd = req.getRequestDispatcher("/formRegistro.jsp");
+        rd.forward(req, res);
+        return;
+      } else {
+        Usuario usuarioNuevo = new Usuario(idUsuario, nombre, apellido, correo, contrasenia, tipo);
+        usuarioDAO.insert(usuarioNuevo);
+      }
     }
 
     // para editar el cliente
@@ -56,6 +67,7 @@ public class seUsuario extends HttpServlet {
       usuarioEditar.setNombre(nombre);
       usuarioEditar.setApellido(apellido);
       usuarioEditar.setCorreo(correo);
+      usuarioEditar.setContrasenia(contrasenia);
       usuarioEditar.setTipo(tipo);
       usuarioDAO.update(usuarioEditar);
     }
@@ -68,4 +80,6 @@ public class seUsuario extends HttpServlet {
     RequestDispatcher rd = req.getRequestDispatcher("/index.jsp");
     rd.forward(req, res);
   }
+
+
 }
