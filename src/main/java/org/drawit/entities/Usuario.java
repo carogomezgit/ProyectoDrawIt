@@ -8,25 +8,25 @@ public class Usuario implements Comparable {
   private String nombre;
   private String apellido;
   private String correo;
-  private String contrasenia;
+  private String clave;
   private TipoUsuario tipo;
 
   // constructor
   public Usuario (){
   }
 
-  public Usuario (int idUsuario, String nombre, String apellido, String correo, String contrasenia, TipoUsuario tipo){
+  public Usuario (int idUsuario, String nombre, String apellido, String correo, String clave, TipoUsuario tipo){
     this.idUsuario = idUsuario;
     this.nombre = nombre;
     this.apellido = apellido;
     this.correo = correo;
-    this.contrasenia = contrasenia;
+    this.clave = clave;
     this.tipo = tipo;
   }
 
-  public Usuario (String correo, String contrasenia, TipoUsuario tipo) {
+  public Usuario (String correo, String clave, TipoUsuario tipo) {
     this.correo = correo;
-    this.contrasenia = contrasenia;
+    this.clave = clave;
     this.tipo = tipo;
   }
 
@@ -62,12 +62,12 @@ public class Usuario implements Comparable {
     this.correo = correo;
   }
 
-  public String getContrasenia() {
-    return contrasenia;
+  public String getClave() {
+    return clave;
   }
 
-  public void setContrasenia(String contrasenia) {
-    this.contrasenia = contrasenia;
+  public void setClave(String clave) {
+    this.clave = clave;
   }
 
   public TipoUsuario getTipo() {
@@ -85,7 +85,7 @@ public class Usuario implements Comparable {
         ", nombre='" + nombre + '\'' +
         ", apellido='" + apellido + '\'' +
         ", correo='" + correo + '\'' +
-        ", contrasenia='" + contrasenia + '\'' +
+        ", clave='" + clave + '\'' +
         ", tipo=" + tipo +
         '}';
   }
@@ -116,7 +116,7 @@ public class Usuario implements Comparable {
       return comparacionCorreo;
     }
 
-    return this.contrasenia.compareTo(otro.contrasenia);
+    return this.clave.compareTo(otro.clave);
   }
 }
 

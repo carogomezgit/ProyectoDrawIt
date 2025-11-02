@@ -17,7 +17,7 @@ import java.util.Date;
 public class seDibujo extends HttpServlet {
 
   @Override
-  public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+  public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     req.setAttribute("mensaje", "Hola desde el Servlet de DrawIt!");
     req.setAttribute("fecha", new Date());
 
@@ -37,6 +37,12 @@ public class seDibujo extends HttpServlet {
       usuario = new UsuarioImpl().getById(Integer.valueOf(req.getParameter("txtUsuario")));
       tematica = Tematica.valueOf(req.getParameter("lstTematica"));
       String urlOriginal = req.getParameter("txtImagen");
+      if (!urlOriginal.contains("drive.google.com/file/d/")) {
+        req.setAttribute("error", "El enlace proporcionado no es un enlace de Google Drive válido");
+        RequestDispatcher rd = req.getRequestDispatcher("/formDibujo.jsp");
+        rd.forward(req, res);
+        return;
+      }
       imagen = convertirLink(urlOriginal); // llamar a metodo convertirLink
       id = Integer.parseInt(req.getParameter("txtId"));
     }
@@ -70,8 +76,7 @@ public class seDibujo extends HttpServlet {
       dibujoDAO.delete(id);
     }
 
-    RequestDispatcher rd = req.getRequestDispatcher("/index.jsp");
-    rd.forward(req, res);
+    res.sendRedirect("muralDibujos.jsp");
   }
 
   private String convertirLink(String url) { // esto es para convertir a enlace directo (google drive)
@@ -89,7 +94,6 @@ public class seDibujo extends HttpServlet {
 
         String fileId = url.substring(idStartIndex, idEndIndex);
         return "https://drive.google.com/thumbnail?id=" + fileId;
-
       } catch (Exception e) {
         System.out.println("Error al convertir URL de Google Drive: " + e.getMessage());
         return url;

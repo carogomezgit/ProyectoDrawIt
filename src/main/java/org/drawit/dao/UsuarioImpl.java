@@ -4,6 +4,7 @@ import org.drawit.entities.TipoUsuario;
 import org.drawit.entities.Usuario;
 import org.drawit.interfaces.AdmConexion;
 import org.drawit.interfaces.DAO;
+import org.drawit.util.PasswordUtil;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,18 +13,29 @@ import java.util.List;
 public class UsuarioImpl implements DAO<Usuario, Integer>, AdmConexion {
   private Connection conn = null;
 
+  private PreparedStatement psInsertar;
+  private PreparedStatement psBuscar;
+  private PreparedStatement psActualizar;
+  private PreparedStatement psActualizarPassword;
+  private PreparedStatement psEliminar;
+
   private static final String SQL_INSERT =
-      "INSERT INTO usuario (nombre, apellido, correo, contraseña, tipo) " +
+      "INSERT INTO usuario (nombre, apellido, correo, clave, tipo) " +
           "VALUES (?, ?, ?, ?, ?)";
 
   private static final String SQL_UPDATE =
       "UPDATE usuario SET " +
-          "nombre = ? , apellido = ? , correo = ? , contraseña = ? , tipo = ? " +
+          "nombre = ? , apellido = ? , correo = ? , clave = ? , tipo = ? " +
           "WHERE idUsuario = ?";
 
+  private static final String SQL_UPDATE_PASSWORD =
+      "UPDATE usuarios SET clave = ? WHERE correo = ?";
+
   private static final String SQL_DELETE = "DELETE FROM usuario WHERE idUsuario = ?";
+
   private static final String SQL_GETALL =
       "SELECT * FROM usuario ORDER BY idUsuario";
+
   private static final String SQL_GETBYID = "SELECT * FROM usuario WHERE idUsuario = ? ";
 
   private static final String SQL_GETBYCORREO = "SELECT * FROM usuario WHERE correo = ? ";
@@ -49,7 +61,7 @@ public class UsuarioImpl implements DAO<Usuario, Integer>, AdmConexion {
         usuario.setNombre(rs.getString("nombre"));
         usuario.setApellido(rs.getString("apellido"));
         usuario.setCorreo(rs.getString("correo"));
-        usuario.setContrasenia(rs.getString("contraseña"));
+        usuario.setClave(rs.getString("clave"));
         usuario.setTipo(TipoUsuario.valueOf(rs.getString("tipo")));
 
         listaUsuarios.add(usuario);
@@ -78,7 +90,7 @@ public class UsuarioImpl implements DAO<Usuario, Integer>, AdmConexion {
       pst.setString(1, usuario.getNombre());
       pst.setString(2, usuario.getApellido());
       pst.setString(3, usuario.getCorreo());
-      pst.setString(4, usuario.getContrasenia());
+      pst.setString(4, usuario.getClave());
       pst.setString(5, usuario.getTipo().toString());
 
       int resultado = pst.executeUpdate();
@@ -87,6 +99,9 @@ public class UsuarioImpl implements DAO<Usuario, Integer>, AdmConexion {
       } else {
         System.out.println("No se pudo agregar el usuario");
       }
+
+      pst.close();
+      conn.close();
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
@@ -106,7 +121,7 @@ public class UsuarioImpl implements DAO<Usuario, Integer>, AdmConexion {
         pst.setString(1, usuario.getNombre());
         pst.setString(2, usuario.getApellido());
         pst.setString(3, usuario.getCorreo());
-        pst.setString(4, usuario.getContrasenia());
+        pst.setString(4, usuario.getClave());
         pst.setString(5, usuario.getTipo().toString());
         pst.setInt(6, usuario.getIdUsuario());
 
@@ -116,9 +131,34 @@ public class UsuarioImpl implements DAO<Usuario, Integer>, AdmConexion {
         } else {
           System.out.println("No se pudo actualizar el usuario");
         }
+
+        pst.close();
+        conn.close();
       } catch (SQLException e) {
         throw new RuntimeException(e);
       }
+    }
+  }
+
+  public void updatePassword(String correo, String nuevaClavePlana) {
+    try {
+      if (null == psActualizarPassword) {
+        psActualizarPassword = obtenerConexion().prepareStatement(SQL_UPDATE_PASSWORD);
+      }
+
+      // Hashear la nueva clave
+      String claveHash = PasswordUtil.hashPassword(nuevaClavePlana);
+
+      psActualizarPassword.setString(1, claveHash);
+      psActualizarPassword.setString(2, correo);
+
+      psActualizarPassword.executeUpdate();
+      System.out.println("Contraseña actualizada para: " + correo);
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } catch (IllegalArgumentException e) {
+      System.err.println("Error al hashear nueva contraseña para " + correo + ": " + e.getMessage());
     }
   }
 
@@ -145,7 +185,6 @@ public class UsuarioImpl implements DAO<Usuario, Integer>, AdmConexion {
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
-
   }
 
   @Override
@@ -167,7 +206,7 @@ public class UsuarioImpl implements DAO<Usuario, Integer>, AdmConexion {
         usuario.setNombre(rs.getString("nombre"));
         usuario.setApellido(rs.getString("apellido"));
         usuario.setCorreo(rs.getString("correo"));
-        usuario.setContrasenia(rs.getString("contraseña"));
+        usuario.setClave(rs.getString("clave"));
         usuario.setTipo(TipoUsuario.valueOf(rs.getString("tipo")));
       }
 
@@ -176,6 +215,34 @@ public class UsuarioImpl implements DAO<Usuario, Integer>, AdmConexion {
       conn.close();
     } catch (SQLException e) {
       throw new RuntimeException(e);
+    }
+
+    return usuario;
+  }
+
+  public Usuario getByCorreo(String id) {
+    Usuario usuario = null;
+
+    try {
+      if (null == psBuscar) {
+        psBuscar = obtenerConexion().prepareStatement(SQL_GETBYCORREO);
+      }
+
+      psBuscar.setString(1, id);
+      ResultSet rs = psBuscar.executeQuery();
+
+      if (rs.next()) {
+        usuario = new Usuario();
+        usuario.setIdUsuario(rs.getInt("idUsuario"));
+        usuario.setNombre(rs.getString("nombre"));
+        usuario.setApellido(rs.getString("apellido"));
+        usuario.setCorreo(rs.getString("correo"));
+        usuario.setClave(rs.getString("clave"));
+        usuario.setTipo(TipoUsuario.valueOf(rs.getString("tipo")));
+      }
+
+    } catch (SQLException e) {
+      e.printStackTrace();
     }
 
     return usuario;

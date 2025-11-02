@@ -28,7 +28,8 @@
     <jsp:include page="header.jsp" />
 
     <main class="container flex-fill mt-5 pt-4">
-         <h2>Mural de Dibujos</h2>
+         <h1>Mural de Dibujos</h1>
+         <p>Aquí se encuentran todos las creaciones de la comunidad</p>
     <div class="table-responsive">
          <table class="table table-striped table-hover">
               <thead class="table-dark">
@@ -38,6 +39,7 @@
                     <th>Autor</th>
                     <th>Temática</th>
                     <th>Administrar</th>
+                    <th></th>
               </tr>
               </thead>
               <tbody>
@@ -49,8 +51,16 @@
                         <td> <%=d.getTitulo() %> </td>
                         <td> <%=d.getUsuario().getNombre() %> <%=d.getUsuario().getApellido() %> </td>
                         <td> <%=d.getTematica() %> </td>
-                        <td> <a href="formDibujo.jsp?operacion=editar&id=<%=d.getIdDibujo() %>">Editar</a></td>
-                        <td> <a href="seDibujo?operacion=eliminar&id=<%=d.getIdDibujo() %>">Borrar</a></td>
+                        <d:if test="${rolUsuario == 'ADMINISTRADOR'}">
+                             <td> <a href="formDibujo.jsp?operacion=editar&id=<%=d.getIdDibujo() %>">Editar</a></td>
+                             <td> <form action="seDibujo" method="POST"
+                             onsubmit="return confirm('¿Estás seguro de que deseas eliminar este dibujo?');">
+                             <input type="hidden" name="operacion" value="eliminar" />
+                             <input type="hidden" name="id" value="<%=d.getIdDibujo() %>" />
+                             <button type="submit" class="btn btn-link text-danger p-0">Borrar</button>
+                                  </form>
+                             </td>
+                        </d:if>
                   </tr>
                   <% } %>
                   </tbody>

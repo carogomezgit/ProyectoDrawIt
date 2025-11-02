@@ -15,7 +15,7 @@ import java.util.Date;
 public class seUsuario extends HttpServlet {
 
   @Override
-  public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+  public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     req.setAttribute("mensaje", "Hola desde el Servlet de DrawIt!");
     req.setAttribute("fecha", new Date());
 
@@ -23,7 +23,7 @@ public class seUsuario extends HttpServlet {
     String nombre = "";
     String apellido = "";
     String correo = "";
-    String contrasenia = "";
+    String clave = "";
     TipoUsuario tipo = null;
     int idUsuario = -1;
 
@@ -33,7 +33,7 @@ public class seUsuario extends HttpServlet {
       nombre = req.getParameter("txtNombre");
       apellido = req.getParameter("txtApellido");
       correo = req.getParameter("txtCorreo");
-      contrasenia = req.getParameter("txtContraseña");
+      clave = req.getParameter("txtClave");
       tipo = TipoUsuario.valueOf(req.getParameter("lstTipo"));
       idUsuario = Integer.parseInt(req.getParameter("txtIdUsuario"));
     }
@@ -56,8 +56,15 @@ public class seUsuario extends HttpServlet {
         rd.forward(req, res);
         return;
       } else {
-        Usuario usuarioNuevo = new Usuario(idUsuario, nombre, apellido, correo, contrasenia, tipo);
+        String claveHasheada = org.drawit.util.PasswordUtil.hashPassword(clave);
+        Usuario usuarioNuevo = new Usuario(idUsuario, nombre, apellido, correo, claveHasheada, tipo);
         usuarioDAO.insert(usuarioNuevo);
+
+        req.setAttribute("mensajeExito", "¡Te has registrado correctamente! Ahora puedes iniciar sesión.");
+
+        RequestDispatcher rd = req.getRequestDispatcher("/formLogin.jsp");
+        rd.forward(req, res);
+        return;
       }
     }
 
@@ -67,7 +74,7 @@ public class seUsuario extends HttpServlet {
       usuarioEditar.setNombre(nombre);
       usuarioEditar.setApellido(apellido);
       usuarioEditar.setCorreo(correo);
-      usuarioEditar.setContrasenia(contrasenia);
+      usuarioEditar.setClave(clave);
       usuarioEditar.setTipo(tipo);
       usuarioDAO.update(usuarioEditar);
     }
@@ -77,8 +84,7 @@ public class seUsuario extends HttpServlet {
       usuarioDAO.delete(idUsuario);
     }
 
-    RequestDispatcher rd = req.getRequestDispatcher("/index.jsp");
-    rd.forward(req, res);
+    res.sendRedirect("listadoUsuario.jsp");
   }
 
 

@@ -22,7 +22,7 @@
 <c:choose>
     <c:when test="${param.operacion == 'editar'}" > <c:set var="tituloPagina" value="Editar Usuario" /> </c:when>
     <c:when test="${param.operacion == 'eliminar'}" > <c:set var="tituloPagina" value="Eliminar Usuario" /> </c:when>
-    <c:otherwise> <c:set var="tituloPagina" value="Nuevo Usuario" /> </c:otherwise>
+    <c:otherwise> <c:set var="tituloPagina" value="Crea tu cuenta" /> </c:otherwise>
 </c:choose>
 
 <c:set var="isReadOnly" value="${param.operacion == 'eliminar'}" />
@@ -62,7 +62,7 @@
                 <div class="card shadow-sm">
                     <div class="card-body p-4 p-md-5">
 
-                        <h2 class="card-title text-center h3 mb-4">${tituloPagina}</h2>
+                        <h1 class="card-title text-center h3 mb-4">${tituloPagina}</h1>
 
                         <c:if test="${not empty error}">
                             <div class="alert alert-danger" role="alert">
@@ -70,7 +70,7 @@
                             </div>
                         </c:if>
 
-                        <form action="seUsuario" method="GET">
+                        <form action="seUsuario" method="POST">
 
                             <input type="hidden" name="txtIdUsuario" id="txtIdUsuario"
                                 value="${not empty usuarioEditar.idUsuario ? usuarioEditar.idUsuario : -1}"
@@ -118,10 +118,10 @@
                                     required />
                             </div>
                             <div class="mb-3">
-                                <label for="txtContraseña" class="form-label">Contraseña</label>
-                                <input type="text" name="txtContraseña" id="txtContraseña" class="form-control"
-                                placeholder="Contraseña"
-                                value="${not empty usuarioEditar.contrasenia ? usuarioEditar.contrasenia : ''}"
+                                <label for="txtClave" class="form-label">Contraseña</label>
+                                <input type="password" name="txtClave" id="txtClave" class="form-control"
+                                placeholder="1234"
+                                value="${not empty usuarioEditar.clave ? usuarioEditar.clave : ''}"
                                 ${isReadOnly ? 'readonly' : ''}
                                 required />
                             </div>

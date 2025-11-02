@@ -22,8 +22,9 @@ public class DibujoImpl implements DAO<Dibujo, Integer>, AdmConexion {
           "WHERE idDibujo = ?";
 
   private static final String SQL_DELETE = "DELETE FROM dibujo WHERE idDibujo = ?";
-  private static final String SQL_GETALL =
-      "SELECT * FROM dibujo ORDER BY titulo";
+
+  private static final String SQL_GETALL = "SELECT * FROM dibujo ORDER BY titulo";
+
   private static final String SQL_GETBYID = "SELECT * FROM dibujo WHERE idDibujo = ? ";
 
 
@@ -84,6 +85,9 @@ public class DibujoImpl implements DAO<Dibujo, Integer>, AdmConexion {
       } else {
         System.out.println("No se pudo insertar el dibujo");
       }
+
+      pst.close();
+      conn.close();
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
