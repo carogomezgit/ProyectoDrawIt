@@ -49,7 +49,7 @@
 
                         <c:if test="${not empty errorAMostrar}">
                             <div class="alert alert-danger" role="alert">
-                            ${errorToShow}
+                            ${errorAMostrar}
                             </div>
                         </c:if>
 

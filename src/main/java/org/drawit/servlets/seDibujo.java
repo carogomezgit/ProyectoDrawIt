@@ -20,6 +20,7 @@ public class seDibujo extends HttpServlet {
   public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     req.setAttribute("mensaje", "Hola desde el Servlet de DrawIt!");
     req.setAttribute("fecha", new Date());
+    req.setCharacterEncoding("UTF-8");
 
     String operacion = "nuevo";
     String titulo = "";
@@ -37,13 +38,16 @@ public class seDibujo extends HttpServlet {
       usuario = new UsuarioImpl().getById(Integer.valueOf(req.getParameter("txtUsuario")));
       tematica = Tematica.valueOf(req.getParameter("lstTematica"));
       String urlOriginal = req.getParameter("txtImagen");
-      if (!urlOriginal.contains("drive.google.com/file/d/")) {
-        req.setAttribute("error", "El enlace proporcionado no es un enlace de Google Drive válido");
+      if (urlOriginal.contains("drive.google.com/file/d/")) {
+        imagen = convertirLink(urlOriginal);
+      } else if (urlOriginal.contains("drive.google.com/thumbnail?id=")) {
+        imagen = urlOriginal;
+      } else {
+        req.setAttribute("error", "El enlace proporcionado no es un enlace de Google Drive válido.");
         RequestDispatcher rd = req.getRequestDispatcher("/formDibujo.jsp");
         rd.forward(req, res);
         return;
       }
-      imagen = convertirLink(urlOriginal); // llamar a metodo convertirLink
       id = Integer.parseInt(req.getParameter("txtId"));
     }
     else {

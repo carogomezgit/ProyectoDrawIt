@@ -23,7 +23,7 @@ public class seSesion extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-
+    request.setCharacterEncoding("UTF-8");
     String cerrarSesionParam = request.getParameter("cerrarSesion");
 
     if ("true".equals(cerrarSesionParam)) {
@@ -36,13 +36,12 @@ public class seSesion extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-
+    request.setCharacterEncoding("UTF-8");
     iniciarSesion(request, response);
   }
 
   private void cerrarSesion(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-
     HttpSession session = request.getSession(false);
 
     if (session != null) {
@@ -53,7 +52,7 @@ public class seSesion extends HttpServlet {
       session.invalidate();
     }
 
-    request.setAttribute("mensajeExito", "Se ha cerrado la sesión correctamente");
+    request.setAttribute("mensajeExito", "Se ha cerrado la sesión correctamente.");
     redirigirA("formLogin.jsp", request, response);
   }
 
@@ -70,7 +69,7 @@ public class seSesion extends HttpServlet {
 
   private String validarCredenciales(String correo, String clave, HttpServletRequest request) {
     if (correo == null || clave == null || correo.trim().isEmpty() || clave.trim().isEmpty()) {
-      request.setAttribute("mensajeError", "Correo y contraseña son obligatorios");
+      request.setAttribute("mensajeError", "Correo y contraseña son obligatorios.");
       return "formLogin.jsp";
     }
 
@@ -78,26 +77,26 @@ public class seSesion extends HttpServlet {
 
     if (usuariosActivos.containsKey(correo)) {
       request.setAttribute("mensajeError",
-          "No puedes iniciar sesión en dos equipos al mismo tiempo");
+          "No puedes iniciar sesión en dos equipos al mismo tiempo.");
       return "formLogin.jsp";
     }
 
     Usuario usuario = usuarioDAO.getByCorreo(correo);
 
     if (usuario == null) {
-      request.setAttribute("mensajeError", "Credenciales no válidas");
+      request.setAttribute("mensajeError", "Credenciales no válidas.");
       return "formLogin.jsp";
     }
 
     // Verificar contraseña con BCrypt - con manejo de errores
     try {
       if (!PasswordUtil.verifyPassword(clave, usuario.getClave())) {
-        request.setAttribute("mensajeError", "Credenciales no válidas");
+        request.setAttribute("mensajeError", "Credenciales no válidas.");
         return "formLogin.jsp";
       }
     } catch (Exception e) {
       System.err.println("Error verificando contraseña: " + e.getMessage());
-      request.setAttribute("mensajeError", "Error en el sistema de autenticación");
+      request.setAttribute("mensajeError", "Error en el sistema de autenticación.");
       return "formLogin.jsp";
     }
 
@@ -105,7 +104,7 @@ public class seSesion extends HttpServlet {
     HttpSession sesion = request.getSession();
     sesion.setAttribute("usuario", usuario);
 
-    request.setAttribute("mensajeExito", "Sesión iniciada correctamente");
+    request.setAttribute("mensajeExito", "Sesión iniciada correctamente. ¡Bienvenido/a " + usuario.getNombre() + "!");
     return "index.jsp";
   }
 

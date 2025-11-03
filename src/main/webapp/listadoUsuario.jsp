@@ -10,7 +10,10 @@
 <c:set var="rolUsuario" value="${not empty usuario ? usuario.tipo : 'INVITADO'}" />
 
 <c:if test="${rolUsuario != 'ADMINISTRADOR'}">
-    <c:redirect url="formLogin.jsp?mensajeError=No tienes permisos para acceder a esta página."/>
+    <c:url var="loginUrl" value="formLogin.jsp">
+            <c:param name="mensajeError" value="No tienes permisos para acceder a esta página."/>
+        </c:url>
+        <c:redirect url="${loginUrl}"/>
 </c:if>
 
 <%

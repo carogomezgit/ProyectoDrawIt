@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page isELIgnored="false" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <!doctype html>
 <html lang="es" class="h-100">
@@ -14,8 +15,14 @@
 <body class="d-flex flex-column h-100">
     <jsp:include page="header.jsp" />
     <main class="container flex-fill mt-5 pt-4">
-        <div class="text-center p-5 rounded-3">
-            <h1 class="display-4">¡Bienvenido a DrawIt!</h1>
+
+        <c:if test="${not empty mensajeExito}">
+            <div class="alert alert-success text-dark" role="alert">
+                ${mensajeExito}
+            </div>
+        </c:if>
+            <div class="text-center p-5 rounded-3">
+                <h1 class="display-4">¡Bienvenido a DrawIt!</h1>
                 <p class="lead">Explorá el mural para ver las creaciones de otros artistas o subí la tuya</p>
             <hr class="my-4">
                 <a class="btn btn-primary btn-lg" href="muralDibujos.jsp" role="button">Ver el Mural</a>

@@ -79,7 +79,7 @@
                                   class="d-inline">
                                 <input type="hidden" name="operacion" value="eliminar" />
                                 <input type="hidden" name="id" value="<%=d.getIdDibujo() %>" />
-                                <button type*="submit" class="btn btn-sm btn-danger">Borrar</button>
+                                <button type="submit" class="btn btn-sm btn-danger">Borrar</button>
                             </form>
                         </div>
                     </d:if>

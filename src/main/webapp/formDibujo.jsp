@@ -16,8 +16,12 @@
 <d:set var="rolUsuario" value="${not empty usuario ? usuario.tipo : 'INVITADO'}" />
 
 <d:if test="${param.operacion == 'editar' || param.operacion == 'eliminar'}">
-    <d:set var="idDibujo" value="${Integer.parseInt(param.id)}" />
-    <d:set var="dibujoEditar" value="${dibujoDao.getById(idDibujo)}" />
+    <d:set var="idParamValue" value="${not empty param.id ? param.id : param.txtId}" />
+
+    <d:if test="${not empty idParamValue}">
+        <d:set var="idDibujo" value="${Integer.parseInt(idParamValue)}" />
+        <d:set var="dibujoEditar" value="${dibujoDao.getById(idDibujo)}" />
+    </d:if>
     <d:set var="listaDibujos" value="${dibujoDao.getAll()}" />
     <d:set var="listaTematicas" value="${Tematica.values()}" />
 </d:if>
@@ -109,7 +113,6 @@
                             ${isReadOnly ? 'readonly' : ''}
                             required />
                         </div>
-                        <br>
 
                         <d:choose>
                             <d:when test="${rolUsuario == 'ADMINISTRADOR'}">
@@ -131,7 +134,7 @@
                                 <input type="hidden" name="txtUsuario" value="${usuario.idUsuario}" />
                             </d:otherwise>
                         </d:choose>
-                        <br>
+
                          <div class="mb-3">
                             <label for="lstTematica" class="form-label">Temática</label>
                             <select name="lstTematica" id="lstTematica" class="form-select"
@@ -146,7 +149,6 @@
                                 </d:forEach>
                              </select>
                         </div>
-                        <br>
                         <div class="mb-3">
                              <label for="txtImagen" class="form-label">URL de la Imagen</label>
                             <input type="text" name="txtImagen" id="txtImagen" class="form-control"
@@ -159,7 +161,6 @@
                                 <em>Solo soporta enlaces de Google Drive</em>
                             </div>
                          </div>
-                        <br>
                         <div class="d-grid mt-4">
                             <input type="submit" value="${btnText}" class="btn ${btnClass} btn-lg" />
                          </div>

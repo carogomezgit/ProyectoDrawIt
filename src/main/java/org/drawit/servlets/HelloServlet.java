@@ -15,6 +15,7 @@ public class HelloServlet extends HttpServlet {
   public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     req.setAttribute("mensaje", "Hola desde el Servlet ProgI IES63");
     req.setAttribute("fecha", new Date());
+    req.setCharacterEncoding("UTF-8");
 
     RequestDispatcher rd = req.getRequestDispatcher("/hello.jsp");
     rd.forward(req, res);

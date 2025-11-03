@@ -16,6 +16,7 @@ public class seUsuario extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+    req.setCharacterEncoding("UTF-8");
     req.setAttribute("mensaje", "Hola desde el Servlet de DrawIt!");
     req.setAttribute("fecha", new Date());
 
@@ -51,7 +52,7 @@ public class seUsuario extends HttpServlet {
 
       if (usuarioDAO.existsByCorreo(correo)) {
         System.out.println("El correo ya se encuentra registrado");
-        req.setAttribute("error", "El correo " + correo + " ya se encuentra registrado");
+        req.setAttribute("error", "El correo " + correo + " ya se encuentra registrado. Por favor, utiliza otro correo.");
         RequestDispatcher rd = req.getRequestDispatcher("/formRegistro.jsp");
         rd.forward(req, res);
         return;

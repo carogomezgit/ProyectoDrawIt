@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <c:set var="usuario" value="${sessionScope.usuario}" />
-<c:set var="rolUsuario" value="${not empty usuario ? usuario.tipo : 'INVITADO'}" />
+<c:set var="rolUsuario" value="${not empty usuario ? usuario.tipo : 'INVITADO'}" scope="request" />
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container-fluid">

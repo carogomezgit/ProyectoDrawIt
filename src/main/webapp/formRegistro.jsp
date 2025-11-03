@@ -120,10 +120,9 @@
                             <div class="mb-3">
                                 <label for="txtClave" class="form-label">Contraseña</label>
                                 <input type="password" name="txtClave" id="txtClave" class="form-control"
-                                placeholder="1234"
-                                value="${not empty usuarioEditar.clave ? usuarioEditar.clave : ''}"
-                                ${isReadOnly ? 'readonly' : ''}
-                                required />
+                                   placeholder="Dejar vacío para no cambiar"
+                                   ${isReadOnly ? 'readonly' : ''}
+                                   />
                             </div>
                             <div class="mb-3">
                                 <label for="lstTipo" class="form-label">Tipo de Usuario</label>
