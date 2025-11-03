@@ -37,10 +37,20 @@
                                 ${mensajeExito}
                             </div>
                         </c:if>
-                        <c:if test="${not empty mensajeError}">
-                             <div class="alert alert-danger" role="alert">
-                                 ${mensajeError}
-                             </div>
+
+                        <c:choose>
+                        <c:when test="${not empty mensajeError}">
+                            <c:set var="errorAMostrar" value="${mensajeError}" />
+                        </c:when>
+                        <c:otherwise>
+                            <c:set var="errorAMostrar" value="${param.mensajeError}" />
+                        </c:otherwise>
+                        </c:choose>
+
+                        <c:if test="${not empty errorAMostrar}">
+                            <div class="alert alert-danger" role="alert">
+                            ${errorToShow}
+                            </div>
                         </c:if>
 
                         <form action="seSesion" method="post">

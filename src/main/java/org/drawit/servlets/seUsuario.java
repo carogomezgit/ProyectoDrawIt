@@ -74,7 +74,10 @@ public class seUsuario extends HttpServlet {
       usuarioEditar.setNombre(nombre);
       usuarioEditar.setApellido(apellido);
       usuarioEditar.setCorreo(correo);
-      usuarioEditar.setClave(clave);
+      if (clave != null && !clave.trim().isEmpty()) { // debe hashearse la nueva contraseña
+        String claveHasheada = org.drawit.util.PasswordUtil.hashPassword(clave);
+        usuarioEditar.setClave(claveHasheada);
+      }
       usuarioEditar.setTipo(tipo);
       usuarioDAO.update(usuarioEditar);
     }

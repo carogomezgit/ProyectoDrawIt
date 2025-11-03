@@ -3,7 +3,7 @@
 <%@ taglib prefix="d" uri="jakarta.tags.core" %>
 
 <d:if test="${empty sessionScope.usuario}">
-    <d:redirect url="formLogin.jsp?mensajeError=Debes iniciar sesión para subir un dibujo."/>
+    <d:redirect url="formLogin.jsp?mensajeError=Debes iniciar sesion para subir un dibujo."/>
 </d:if>
 <%@ page import="org.drawit.entities.Tematica" %>
 
