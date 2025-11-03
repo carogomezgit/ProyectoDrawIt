@@ -36,8 +36,8 @@
             <div class="d-flex align-items-center gap-2">
                 <c:choose>
                     <c:when test="${empty usuario}">
-                        <a href="${pageContext.request.contextPath}/formRegistro.jsp" class="btn btn-outline-primary btn-sm">Registrarse</a>
-                        <a href="${pageContext.request.contextPath}/formLogin.jsp" class="btn btn-outline-success btn-sm">Ingresar</a>
+                        <a href="${pageContext.request.contextPath}/formRegistro.jsp" class="btn btn-primary btn-sm">Registrarse</a>
+                        <a href="${pageContext.request.contextPath}/formLogin.jsp" class="btn btn-success btn-sm">Ingresar</a>
                     </c:when>
                     <c:otherwise>
                         <span class="navbar-text text-white">
@@ -46,7 +46,7 @@
                                 <span class="badge bg-danger">Admin</span>
                             </c:if>
                         </span>
-                        <a href="seSesion?cerrarSesion=true" class="btn btn-outline-danger btn-sm">Cerrar Sesión</a>
+                        <a href="seSesion?cerrarSesion=true" class="btn btn-danger btn-sm">Cerrar Sesión</a>
                     </c:otherwise>
                 </c:choose>
             </div>
