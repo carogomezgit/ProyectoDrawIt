@@ -10,7 +10,6 @@ Los nuevos usuarios pueden crear una cuenta con datos personales reflejados en e
 
 <img width="512" height="523" alt="image" src="https://github.com/user-attachments/assets/dbf002e3-5036-4d59-8114-c02332691008" />
 
-# Funciones disponibles
 ## Inicio de sesión
 Los usuarios registrados pueden iniciar sesión con sus credenciales.
 
